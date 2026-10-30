@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#080718" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="description" content="GEO DASH: NEON RUSH — a fast, neon-soaked one-tap rhythm platformer built for mobile." />
+  <title>GEO DASH — Neon Rush</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23080718'/%3E%3Crect x='13' y='13' width='38' height='38' rx='7' fill='%2300e5ff'/%3E%3Crect x='22' y='25' width='7' height='7' rx='2' fill='%23080718'/%3E%3Crect x='35' y='25' width='7' height='7' rx='2' fill='%23080718'/%3E%3Cpath d='M24 41h16' stroke='%23080718' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="stage" aria-hidden="true"></canvas>
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <!-- ══════════════════ TITLE ══════════════════ -->
+    <section class="screen title-screen is-active" id="screen-title">
+      <header class="topbar">
+        <div class="version-pill"><span class="dot"></span> v1.0</div>
+        <div class="top-actions">
+          <button class="icon-btn" id="btn-sound" aria-label="Toggle sound" title="Sound">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h3l4-4v14l-4-4H4z"/><path class="sound-wave" d="M15 8.5a5 5 0 0 1 0 7"/><path class="sound-wave" d="M17.8 6a8.5 8.5 0 0 1 0 12"/></svg>
+          </button>
+          <button class="icon-btn" id="btn-settings" aria-label="Settings" title="Settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.36a1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.36a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.64 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.64a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.36 9v.09a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="title-content">
+        <div class="logo-wrap">
+          <div class="logo-kicker"><span></span> NEON RUSH <span></span></div>
+          <h1 class="logo"><span class="logo-geo">GEO</span><span class="logo-dash">DASH</span></h1>
+          <div class="logo-underline"><i></i><b></b><i></i></div>
+          <p class="tagline">ONE TAP · ZERO MERCY</p>
+        </div>
+
+        <button id="btn-play" class="play-btn" aria-label="Play">
+          <span class="play-main">PLAY</span>
+          <span class="play-sub" id="play-sub">CONTINUE · NEON RUNNER</span>
+        </button>
+
+        <nav class="menu-row" aria-label="Main menu">
+          <button id="btn-levels" class="menu-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/></svg>
+            LEVELS
+          </button>
+          <button id="btn-customize" class="menu-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="10" cy="11" r="1.4" fill="currentColor" stroke="none"/><circle cx="15.5" cy="11" r="1.4" fill="currentColor" stroke="none"/><path d="M8.5 16c1.6 1.4 5.4 1.4 7 0"/></svg>
+            ICONS
+          </button>
+          <button id="btn-how" class="menu-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 1 1 3.6 2.4c-.8.4-1.1 1-1.1 1.8"/><circle cx="12" cy="17" r=".8" fill="currentColor" stroke="none"/></svg>
+            HOW TO PLAY
+          </button>
+        </nav>
+      </main>
+
+      <footer class="title-footer">
+        <div class="footer-hint"><kbd>TAP</kbd> OR <kbd>SPACE</kbd> TO JUMP · HOLD TO AUTO-JUMP</div>
+        <div class="footer-credit">A NEON RHYTHM RUNNER · BUILT FOR MOBILE</div>
+      </footer>
+    </section>
+
+    <!-- ══════════════════ LEVELS ══════════════════ -->
+    <section class="screen sheet-screen" id="screen-levels">
+      <header class="sheet-head">
+        <button class="back-btn" data-back aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="sheet-title">
+          <h2>SELECT LEVEL</h2>
+          <p>MASTER THE RHYTHM · CHASE THE COINS</p>
+        </div>
+        <div class="sheet-stat" id="levels-total">0%</div>
+      </header>
+      <div class="level-grid" id="level-grid"></div>
+      <div class="levels-foot">
+        <span><i class="legend-dot"></i> COMPLETED</span>
+        <span><i class="legend-coin"></i> 3 COINS PER LEVEL</span>
+        <span>PROGRESS SAVED LOCALLY</span>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CUSTOMIZE ══════════════════ -->
+    <section class="screen sheet-screen" id="screen-customize">
+      <header class="sheet-head">
+        <button class="back-btn" data-back aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="sheet-title">
+          <h2>ICONS</h2>
+          <p>PICK YOUR CUBE · PICK YOUR TRAIL</p>
+        </div>
+        <div class="sheet-stat" id="icon-count">1/8</div>
+      </header>
+
+      <div class="custom-wrap">
+        <div class="custom-preview">
+          <canvas id="icon-preview" width="360" height="360" aria-hidden="true"></canvas>
+          <div class="preview-ring"></div>
+          <div class="preview-label">YOUR RUNNER</div>
+        </div>
+        <div class="custom-options">
+          <div class="option-block">
+            <h3>ICON</h3>
+            <div class="icon-grid" id="icon-grid"></div>
+          </div>
+          <div class="option-block">
+            <h3>TRAIL</h3>
+            <div class="trail-row" id="trail-row"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ GAME ══════════════════ -->
+    <section class="screen game-screen" id="screen-game">
+      <div class="hud">
+        <button class="hud-btn" id="btn-pause" aria-label="Pause">
+          <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1.4"/><rect x="14" y="5" width="4" height="14" rx="1.4"/></svg>
+        </button>
+
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <span id="hud-level">NEON RUNNER</span>
+            <span id="hud-percent">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+            <div class="progress-ticks" aria-hidden="true"></div>
+          </div>
+          <div class="progress-sub">
+            <span id="hud-attempt">ATTEMPT 01</span>
+            <span id="hud-best">BEST 0%</span>
+          </div>
+        </div>
+
+        <div class="coin-hud" id="hud-coins" aria-label="Coins">
+          <i></i><i></i><i></i>
+        </div>
+      </div>
+
+      <div class="practice-strip" id="practice-strip">
+        <span class="practice-badge">PRACTICE</span>
+        <button class="checkpoint-btn" id="btn-checkpoint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 21V4"/><path d="M6 5h11l-2 3.5L17 12H6"/></svg>
+          CHECKPOINT
+        </button>
+      </div>
+
+      <div class="attempt-toast" id="attempt-toast"></div>
+      <div class="tap-prompt" id="tap-prompt"><b>TAP</b> TO JUMP</div>
+      <div class="mode-flash" id="mode-flash"></div>
+    </section>
+
+    <!-- ══════════════════ PAUSE ══════════════════ -->
+    <div class="overlay" id="overlay-pause">
+      <div class="panel pause-panel">
+        <div class="panel-kicker">RUN SUSPENDED</div>
+        <h2 class="panel-title">PAUSED</h2>
+        <div class="pause-progress">
+          <div class="pause-progress-label"><span id="pause-level">NEON RUNNER</span><b id="pause-percent">0%</b></div>
+          <div class="progress-track"><div class="progress-fill" id="pause-fill"></div></div>
+        </div>
+        <div class="pause-actions">
+          <button class="btn wide primary" id="btn-resume">RESUME</button>
+          <button class="btn wide" id="btn-restart">RESTART</button>
+          <button class="btn wide ghost" id="btn-practice-toggle">PRACTICE MODE: OFF</button>
+          <button class="btn wide ghost danger" id="btn-quit">QUIT TO MENU</button>
+        </div>
+        <div class="pause-hint"><kbd>ESC</kbd> RESUME · <kbd>R</kbd> RESTART</div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ COMPLETE ══════════════════ -->
+    <div class="overlay complete-overlay" id="overlay-complete">
+      <div class="panel complete-panel">
+        <div class="complete-burst" aria-hidden="true"></div>
+        <div class="panel-kicker" id="complete-kicker">100% COMPLETE</div>
+        <h2 class="panel-title complete-title">LEVEL<br/>COMPLETE</h2>
+        <div class="complete-level" id="complete-level">NEON RUNNER</div>
+
+        <div class="complete-coins" id="complete-coins"><i></i><i></i><i></i></div>
+
+        <div class="stats-grid">
+          <div class="stat"><span id="stat-attempts">1</span><small>ATTEMPTS</small></div>
+          <div class="stat"><span id="stat-jumps">0</span><small>JUMPS</small></div>
+          <div class="stat"><span id="stat-time">0:00</span><small>TIME</small></div>
+          <div class="stat"><span id="stat-best">100%</span><small>BEST</small></div>
+        </div>
+
+        <div class="complete-actions">
+          <button class="btn primary" id="btn-next">NEXT LEVEL</button>
+          <button class="btn" id="btn-complete-replay">REPLAY</button>
+          <button class="btn ghost" id="btn-complete-levels">LEVELS</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ ENDLESS GAME OVER ══════════════════ -->
+    <div class="overlay" id="overlay-gameover">
+      <div class="panel">
+        <div class="panel-kicker">RUN TERMINATED</div>
+        <h2 class="panel-title">GAME OVER</h2>
+        <div class="endless-score"><b id="gameover-score">0</b><span>DISTANCE</span></div>
+        <div class="endless-best" id="gameover-best">BEST · 0</div>
+        <div class="pause-actions">
+          <button class="btn wide primary" id="btn-endless-retry">RUN AGAIN</button>
+          <button class="btn wide ghost" id="btn-endless-quit">QUIT TO MENU</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ SETTINGS ══════════════════ -->
+    <div class="overlay" id="overlay-settings">
+      <div class="panel settings-panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-kicker">SYSTEM</div>
+            <h2 class="panel-title small">SETTINGS</h2>
+          </div>
+          <button class="close-btn" data-close aria-label="Close">✕</button>
+        </div>
+
+        <div class="setting-row">
+          <label for="set-music">MUSIC</label>
+          <input type="range" id="set-music" min="0" max="100" value="70" />
+          <output id="out-music">70</output>
+        </div>
+        <div class="setting-row">
+          <label for="set-sfx">SFX</label>
+          <input type="range" id="set-sfx" min="0" max="100" value="80" />
+          <output id="out-sfx">80</output>
+        </div>
+        <div class="setting-row toggle-row">
+          <label for="set-shake">SCREEN SHAKE</label>
+          <button class="toggle" id="set-shake" role="switch" aria-checked="true"><i></i></button>
+        </div>
+        <div class="setting-row toggle-row">
+          <label for="set-particles">EXTRA PARTICLES</label>
+          <button class="toggle" id="set-particles" role="switch" aria-checked="true"><i></i></button>
+        </div>
+        <div class="setting-row toggle-row">
+          <label for="set-vibe">HAPTICS</label>
+          <button class="toggle" id="set-vibe" role="switch" aria-checked="true"><i></i></button>
+        </div>
+
+        <button class="btn wide ghost danger" id="btn-reset-progress">RESET ALL PROGRESS</button>
+        <div class="settings-foot">GEO DASH · NEON RUSH · v1.0<br/>A fan-made rhythm platformer. Built with love and zero assets.</div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ HOW TO PLAY ══════════════════ -->
+    <div class="overlay" id="overlay-how">
+      <div class="panel how-panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-kicker">TUTORIAL</div>
+            <h2 class="panel-title small">HOW TO PLAY</h2>
+          </div>
+          <button class="close-btn" data-close aria-label="Close">✕</button>
+        </div>
+        <div class="how-grid">
+          <div class="how-item">
+            <div class="how-icon tap"></div>
+            <div><b>TAP</b><span>Jump. Time it to clear spikes, saws and walls.</span></div>
+          </div>
+          <div class="how-item">
+            <div class="how-icon hold"></div>
+            <div><b>HOLD</b><span>Auto-jump the instant you land. Tap orbs mid-air.</span></div>
+          </div>
+          <div class="how-item">
+            <div class="how-icon ship"></div>
+            <div><b>SHIP</b><span>Hold to rise, release to dive. Thread the gates.</span></div>
+          </div>
+          <div class="how-item">
+            <div class="how-icon ball"></div>
+            <div><b>BALL</b><span>Tap to flip gravity. Roll the floor and ceiling.</span></div>
+          </div>
+        </div>
+        <div class="how-tip">Hit a wall, spike or saw and you restart instantly. Beat the level to unlock the next. Practice Mode saves checkpoints.</div>
+        <button class="btn wide primary" data-close>GOT IT</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════ CONFIRM ══════════════════ -->
+    <div class="overlay" id="overlay-confirm">
+      <div class="panel confirm-panel">
+        <div class="panel-kicker">ARE YOU SURE?</div>
+        <h2 class="panel-title small">RESET PROGRESS</h2>
+        <p class="confirm-copy">This wipes every best score, coin and unlock.</p>
+        <div class="pause-actions">
+          <button class="btn wide danger" id="btn-confirm-reset">YES, WIPE IT</button>
+          <button class="btn wide ghost" data-close>CANCEL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
